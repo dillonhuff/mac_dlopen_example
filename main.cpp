@@ -16,29 +16,32 @@ using namespace std;
 //extern "C" int myFunc(int i);
 
 int main() {
+  string targetBinary = "./libprog.dylib";
+  //string targetBinary = "./prog.o";
   ofstream out("./prog.cpp");
-  // out << "#define EXPORT __attribute__((visibility(\"default\")))\n"
-  //   "EXPORT\n"
+
+  out << //"#define EXPORT __attribute__((visibility(\"default\")))\n"
+    //"EXPORT\n"
+    "int myFunc(int i) {\n"
+    "\treturn 12 + i;\n"
+    "}\n" << endl;
+
+  // out <<
+  //   "#include <iostream>\n"
+  //   "using namespace std;\n"
   //   "int myFunc(int i) {\n"
   //   "\treturn 12 + i;\n"
   //   "}\n" << endl;
-
-  out <<
-    "#include <iostream>\n"
-    "using namespace std;\n"
-    "int myFunc(int i) {\n"
-    "\treturn 12 + i;\n"
-    "}\n"
-    "int main() {\n"
-    "\tcout << \"Im the other main! I print out 12!\" << endl;\n"
-    "}\n" << endl;
+    // "int main() {\n"
+    // "\tcout << \"Im the other main! I print out 12!\" << endl;\n"
+    // "}\n" << endl;
   
   int ret =
-    system("clang++ -std=c++11 ./prog.cpp -o ./prog");
+    system(("clang++ -std=c++11 -fPIC -dynamiclib ./prog.cpp -o " + targetBinary).c_str());
 
   cout << "clang call ret = " << ret << endl;
 
-  void* myLibHandle = dlopen("./prog", RTLD_NOW);
+  void* myLibHandle = dlopen(targetBinary.c_str(), RTLD_LOCAL);
 
   if (myLibHandle == nullptr) {
     printf("dlsym failed: %s\n", dlerror());
@@ -47,26 +50,67 @@ int main() {
 
   cout << "lib handle = " << myLibHandle << endl;
 
-  void* mainFunV = dlsym(myLibHandle, "main");
-
-  if (mainFunV == nullptr) {
+  void* myFuncFunV = dlsym(myLibHandle, "myFunc"); //__Z6myFunci"); //myFunc");
+  if (myFuncFunV == nullptr) {
     printf("dlsym failed: %s\n", dlerror());
-    return -1;
+  } else {
+    printf("FOUND\n");
   }
 
-  int (*otherMain)() =
-    reinterpret_cast<int (*)()>(mainFunV);
+  myFuncFunV = dlsym(myLibHandle, "__Z6myFunci"); //myFunc");
+  if (myFuncFunV == nullptr) {
+    printf("dlsym failed: %s\n", dlerror());
+  } else {
+    printf("FOUND\n");
+  }
 
-  otherMain();
+  myFuncFunV = dlsym(myLibHandle, "_Z6myFunc"); //myFunc");
+  if (myFuncFunV == nullptr) {
+    printf("dlsym failed: %s\n", dlerror());
+  } else {
+    printf("FOUND\n");
+  }
+  
+  myFuncFunV = dlsym(myLibHandle, "myFunci");
+  if (myFuncFunV == nullptr) {
+    printf("dlsym failed: %s\n", dlerror());
+  } else {
+    printf("FOUND\n");
+  }
 
-  // if (myFunV == nullptr) {
+  myFuncFunV = dlsym(myLibHandle, "_myFunc");
+  if (myFuncFunV == nullptr) {
+    printf("dlsym failed: %s\n", dlerror());
+  } else {
+    printf("FOUND\n");
+  }
+
+  myFuncFunV = dlsym(myLibHandle, "__myFunc");
+  if (myFuncFunV == nullptr) {
+    printf("dlsym failed: %s\n", dlerror());
+  } else {
+    printf("FOUND\n");
+  }
+
+  myFuncFunV = dlsym(myLibHandle, "_myFunci");
+  if (myFuncFunV == nullptr) {
+    printf("dlsym failed: %s\n", dlerror());
+  } else {
+    printf("FOUND\n");
+  }
+
+  dlclose(myLibHandle);
+
+  // void* mainFunV = dlsym(myLibHandle, "main");
+
+  // if (mainFunV == nullptr) {
   //   printf("dlsym failed: %s\n", dlerror());
   //   return -1;
   // }
-  // cout << "myFunV func = " << myFunV << endl;
 
-  // int (*myFunc)(int) =
-  //   static_cast<int (*myFunc)(int)>( dlsym(myLibHandle, "myFunc") );
+  // int (*otherMain)() =
+  //   reinterpret_cast<int (*)()>(mainFunV);
 
-  // cout << "myFunc = " << myFunc(12) << endl;
+  //otherMain();
+
 }
