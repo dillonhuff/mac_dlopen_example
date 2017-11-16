@@ -36,55 +36,6 @@ int main() {
   cout << "lib handle = " << myLibHandle << endl;
 
   void* myFuncFunV;
-  // void* myFuncFunV = dlsym(myLibHandle, "myFunc"); //__Z6myFunci"); //myFunc");
-  // if (myFuncFunV == nullptr) {
-  //   printf("dlsym failed: %s\n", dlerror());
-  // } else {
-  //   printf("FOUND\n");
-  // }
-
-  // myFuncFunV = dlsym(myLibHandle, "__Z6myFunci"); //myFunc");
-  // if (myFuncFunV == nullptr) {
-  //   printf("dlsym failed: %s\n", dlerror());
-  // } else {
-  //   printf("FOUND\n");
-  // }
-
-  // myFuncFunV = dlsym(myLibHandle, "_Z6myFunc"); //myFunc");
-  // if (myFuncFunV == nullptr) {
-  //   printf("dlsym failed: %s\n", dlerror());
-  // } else {
-  //   printf("FOUND\n");
-  // }
-  
-  // myFuncFunV = dlsym(myLibHandle, "myFunci");
-  // if (myFuncFunV == nullptr) {
-  //   printf("dlsym failed: %s\n", dlerror());
-  // } else {
-  //   printf("FOUND\n");
-  // }
-
-  // myFuncFunV = dlsym(myLibHandle, "_myFunc");
-  // if (myFuncFunV == nullptr) {
-  //   printf("dlsym failed: %s\n", dlerror());
-  // } else {
-  //   printf("FOUND\n");
-  // }
-
-  // myFuncFunV = dlsym(myLibHandle, "__myFunc");
-  // if (myFuncFunV == nullptr) {
-  //   printf("dlsym failed: %s\n", dlerror());
-  // } else {
-  //   printf("FOUND\n");
-  // }
-
-  // myFuncFunV = dlsym(myLibHandle, "_myFunci");
-  // if (myFuncFunV == nullptr) {
-  //   printf("dlsym failed: %s\n", dlerror());
-  // } else {
-  //   printf("FOUND\n");
-  // }
-
   myFuncFunV = dlsym(myLibHandle, "_Z6myFunci");
   if (myFuncFunV == nullptr) {
     printf("dlsym failed: %s\n", dlerror());
@@ -110,17 +61,5 @@ int main() {
   cout << "otherFuncCall = " << otherFuncCall(12) << endl;
 
   dlclose(myLibHandle);
-
-  // void* mainFunV = dlsym(myLibHandle, "main");
-
-  // if (mainFunV == nullptr) {
-  //   printf("dlsym failed: %s\n", dlerror());
-  //   return -1;
-  // }
-
-  // int (*otherMain)() =
-  //   reinterpret_cast<int (*)()>(mainFunV);
-
-  //otherMain();
 
 }
