@@ -105,6 +105,12 @@ int main() {
   } else {
     printf("FOUND\n");
   }
+
+  int (*myFuncCall)(int) =
+    reinterpret_cast<int (*)(int)>(myFuncFunV);
+
+  cout << "myFunc = " << myFuncCall(12) << endl;
+    
   
   dlclose(myLibHandle);
 
