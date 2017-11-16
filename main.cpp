@@ -99,6 +99,13 @@ int main() {
     printf("FOUND\n");
   }
 
+  myFuncFunV = dlsym(myLibHandle, "_Z6myFunci");
+  if (myFuncFunV == nullptr) {
+    printf("dlsym failed: %s\n", dlerror());
+  } else {
+    printf("FOUND\n");
+  }
+  
   dlclose(myLibHandle);
 
   // void* mainFunV = dlsym(myLibHandle, "main");
