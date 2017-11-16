@@ -24,7 +24,10 @@ int main() {
     //"EXPORT\n"
     "int myFunc(int i) {\n"
     "\treturn 12 + i;\n"
-    "}\n" << endl;
+    "}\n\n"
+    "float otherFunc(float i) {\n"
+    "\treturn i / 12.3;\n"
+    "}\n\n" << endl;
 
   // out <<
   //   "#include <iostream>\n"
@@ -110,8 +113,19 @@ int main() {
     reinterpret_cast<int (*)(int)>(myFuncFunV);
 
   cout << "myFunc = " << myFuncCall(12) << endl;
-    
-  
+
+  myFuncFunV = dlsym(myLibHandle, "_Z9otherFuncf");
+  if (myFuncFunV == nullptr) {
+    printf("dlsym failed: %s\n", dlerror());
+  } else {
+    printf("FOUND!\n");
+  }
+
+  float (*otherFuncCall)(float) =
+    reinterpret_cast<float (*)(float)>(myFuncFunV);
+
+  cout << "otherFuncCall = " << otherFuncCall(12) << endl;
+
   dlclose(myLibHandle);
 
   // void* mainFunV = dlsym(myLibHandle, "main");
